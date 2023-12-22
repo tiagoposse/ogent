@@ -3,7 +3,7 @@
 package ent
 
 import (
-	"ariga.io/ogent/internal/integration/ogent/ent/schema"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/schema"
 )
 
 // The init function reads all schema descriptors with runtime code

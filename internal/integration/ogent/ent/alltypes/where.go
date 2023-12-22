@@ -5,7 +5,7 @@ package alltypes
 import (
 	"time"
 
-	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/predicate"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 )

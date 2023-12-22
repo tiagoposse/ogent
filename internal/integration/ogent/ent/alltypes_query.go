@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"math"
 
-	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
-	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/alltypes"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/predicate"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"

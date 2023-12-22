@@ -2,7 +2,7 @@
 
 package ogent
 
-import "ariga.io/ogent/internal/integration/ogent/ent"
+import "github.com/tiagoposse/ogent/internal/integration/ogent/ent"
 
 func NewAllTypesCreate(e *ent.AllTypes) *AllTypesCreate {
 	if e == nil {

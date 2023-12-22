@@ -5,8 +5,8 @@ package ent
 import (
 	"context"
 
-	"ariga.io/ogent/example/pets/ent/predicate"
-	"ariga.io/ogent/example/pets/ent/user"
+	"github.com/tiagoposse/ogent/example/pets/ent/predicate"
+	"github.com/tiagoposse/ogent/example/pets/ent/user"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"

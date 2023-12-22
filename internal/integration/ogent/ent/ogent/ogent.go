@@ -6,13 +6,13 @@ import (
 	"context"
 	"net/http"
 
-	"ariga.io/ogent/internal/integration/ogent/ent"
-	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
-	"ariga.io/ogent/internal/integration/ogent/ent/category"
-	"ariga.io/ogent/internal/integration/ogent/ent/hat"
-	"ariga.io/ogent/internal/integration/ogent/ent/pet"
-	"ariga.io/ogent/internal/integration/ogent/ent/schema"
-	"ariga.io/ogent/internal/integration/ogent/ent/user"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/alltypes"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/category"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/hat"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/pet"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/schema"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/user"
 	"github.com/go-faster/jx"
 )
 

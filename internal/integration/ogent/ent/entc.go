@@ -6,11 +6,11 @@ package main
 import (
 	"log"
 
-	"ariga.io/ogent"
 	"entgo.io/contrib/entoas"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	"github.com/ogen-go/ogen"
+	"github.com/tiagoposse/ogent"
 )
 
 func main() {

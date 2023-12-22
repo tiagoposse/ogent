@@ -5,7 +5,7 @@ package user
 import (
 	"fmt"
 
-	"ariga.io/ogent/internal/integration/ogent/ent/schema"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/schema"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )

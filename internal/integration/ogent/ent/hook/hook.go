@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"ariga.io/ogent/internal/integration/ogent/ent"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent"
 )
 
 // The AllTypesFunc type is an adapter to allow the use of ordinary

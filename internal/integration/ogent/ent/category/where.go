@@ -3,7 +3,7 @@
 package category
 
 import (
-	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/predicate"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )

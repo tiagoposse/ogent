@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"ariga.io/ogent/example/pets/ent"
+	"github.com/tiagoposse/ogent/example/pets/ent"
 )
 
 // The CategoryFunc type is an adapter to allow the use of ordinary

@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in ariga.io/ogent/internal/integration/ogent/ent/runtime.go
+// The schema-stitching logic is generated in github.com/tiagoposse/ogent/internal/integration/ogent/ent/runtime.go
 
 const (
 	Version = "v0.12.5"                                         // Version of ent codegen.

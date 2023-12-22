@@ -1,4 +1,4 @@
-module ariga.io/ogent
+module github.com/tiagoposse/ogent
 
 go 1.19
 

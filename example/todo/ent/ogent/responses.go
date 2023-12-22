@@ -2,7 +2,7 @@
 
 package ogent
 
-import "ariga.io/ogent/example/todo/ent"
+import "github.com/tiagoposse/ogent/example/todo/ent"
 
 func NewTodoCreate(e *ent.Todo) *TodoCreate {
 	if e == nil {

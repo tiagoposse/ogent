@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/alltypes"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"

@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"log"
 
-	"ariga.io/ogent/example/todo/ent/migrate"
+	"github.com/tiagoposse/ogent/example/todo/ent/migrate"
 
-	"ariga.io/ogent/example/todo/ent/todo"
+	"github.com/tiagoposse/ogent/example/todo/ent/todo"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"

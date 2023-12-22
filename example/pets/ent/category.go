@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"ariga.io/ogent/example/pets/ent/category"
+	"github.com/tiagoposse/ogent/example/pets/ent/category"
 	"entgo.io/ent/dialect/sql"
 )
 

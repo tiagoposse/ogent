@@ -20,7 +20,7 @@ of the `ogent` code.
 The first step is to add the `ogent` package to your Ent project.
 
 ```shell
-go get ariga.io/ogent@main
+go get github.com/tiagoposse/ogent@main
 ```
 
 `ogent` uses the Ent [Extension API](https://entgo.io/docs/extensions) to integrate with Ent’s code-generation. This
@@ -38,7 +38,7 @@ package main
 import (
 	"log"
 
-	"ariga.io/ogent"
+	"github.com/tiagoposse/ogent"
 	"entgo.io/contrib/entoas"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
@@ -112,7 +112,7 @@ import (
 	"entgo.io/contrib/entoas"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
-	"ariga.io/ogent"
+	"github.com/tiagoposse/ogent"
 	"github.com/ogen-go/ogen"
 )
 
@@ -223,7 +223,7 @@ package main
 import (
 	"log"
 
-	"ariga.io/ogent"
+	"github.com/tiagoposse/ogent"
 	"entgo.io/contrib/entoas"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"

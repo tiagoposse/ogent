@@ -8,14 +8,14 @@ import (
 	"testing"
 	"time"
 
-	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/suite"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/user"
 
-	"ariga.io/ogent/internal/integration/ogent/ent"
-	"ariga.io/ogent/internal/integration/ogent/ent/enttest"
-	"ariga.io/ogent/internal/integration/ogent/ent/ogent"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/enttest"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/ogent"
 )
 
 func TestOgent(t *testing.T) {

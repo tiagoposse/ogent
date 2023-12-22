@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"ariga.io/ogent/example/todo/ent/todo"
+	"github.com/tiagoposse/ogent/example/todo/ent/todo"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

@@ -7,10 +7,10 @@ import (
 	"errors"
 	"fmt"
 
-	"ariga.io/ogent/internal/integration/ogent/ent/hat"
-	"ariga.io/ogent/internal/integration/ogent/ent/pet"
-	"ariga.io/ogent/internal/integration/ogent/ent/schema"
-	"ariga.io/ogent/internal/integration/ogent/ent/user"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/hat"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/pet"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/schema"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )

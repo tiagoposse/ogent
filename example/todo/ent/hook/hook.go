@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"ariga.io/ogent/example/todo/ent"
+	"github.com/tiagoposse/ogent/example/todo/ent"
 )
 
 // The TodoFunc type is an adapter to allow the use of ordinary

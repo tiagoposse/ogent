@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
-	"ariga.io/ogent/example/todo/ent"
-	"ariga.io/ogent/example/todo/ent/ogent"
 	"entgo.io/ent/dialect"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/tiagoposse/ogent/example/todo/ent"
+	"github.com/tiagoposse/ogent/example/todo/ent/ogent"
 )
 
 type handler struct {

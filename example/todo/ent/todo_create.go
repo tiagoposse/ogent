@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"ariga.io/ogent/example/todo/ent/todo"
+	"github.com/tiagoposse/ogent/example/todo/ent/todo"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )

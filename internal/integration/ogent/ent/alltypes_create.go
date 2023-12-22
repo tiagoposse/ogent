@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"time"
 
-	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/alltypes"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"

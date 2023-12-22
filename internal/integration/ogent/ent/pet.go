@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"ariga.io/ogent/internal/integration/ogent/ent/pet"
-	"ariga.io/ogent/internal/integration/ogent/ent/user"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/pet"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 )

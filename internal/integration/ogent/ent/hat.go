@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"ariga.io/ogent/internal/integration/ogent/ent/hat"
-	"ariga.io/ogent/internal/integration/ogent/ent/user"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/hat"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 )

@@ -3,7 +3,7 @@
 package todo
 
 import (
-	"ariga.io/ogent/example/todo/ent/predicate"
+	"github.com/tiagoposse/ogent/example/todo/ent/predicate"
 	"entgo.io/ent/dialect/sql"
 )
 

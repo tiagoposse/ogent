@@ -3,8 +3,8 @@
 package user
 
 import (
-	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
-	"ariga.io/ogent/internal/integration/ogent/ent/schema"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/predicate"
+	"github.com/tiagoposse/ogent/internal/integration/ogent/ent/schema"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )

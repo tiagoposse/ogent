@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"sync"
 
-	"ariga.io/ogent/example/todo/ent/predicate"
-	"ariga.io/ogent/example/todo/ent/todo"
+	"github.com/tiagoposse/ogent/example/todo/ent/predicate"
+	"github.com/tiagoposse/ogent/example/todo/ent/todo"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 )

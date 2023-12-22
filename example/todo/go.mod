@@ -1,8 +1,8 @@
-module ariga.io/ogent/example/todo
+module github.com/tiagoposse/ogent/example/todo
 
 go 1.19
 
-replace ariga.io/ogent => ../../
+replace github.com/tiagoposse/ogent => ../../
 
 require (
 	entgo.io/ent v0.11.9
@@ -18,7 +18,7 @@ require (
 
 require (
 	ariga.io/atlas v0.9.1 // indirect
-	ariga.io/ogent v0.0.0-00010101000000-000000000000 // indirect
+	github.com/tiagoposse/ogent v0.0.0-00010101000000-000000000000 // indirect
 	entgo.io/contrib v0.3.5 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
