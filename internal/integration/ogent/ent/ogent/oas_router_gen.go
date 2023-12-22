@@ -10,26 +10,33 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
+func (s *Server) cutPrefix(path string) (string, bool) {
+	prefix := s.cfg.Prefix
+	if prefix == "" {
+		return path, true
+	}
+	if !strings.HasPrefix(path, prefix) {
+		// Prefix doesn't match.
+		return "", false
+	}
+	// Cut prefix from the path.
+	return strings.TrimPrefix(path, prefix), true
+}
+
 // ServeHTTP serves http request as defined by OpenAPI v3 specification,
 // calling handler that matches the path or returning not found error.
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	elem := r.URL.Path
+	elemIsEscaped := false
 	if rawPath := r.URL.RawPath; rawPath != "" {
 		if normalized, ok := uri.NormalizeEscapedPath(rawPath); ok {
 			elem = normalized
+			elemIsEscaped = strings.ContainsRune(elem, '%')
 		}
 	}
-	if prefix := s.cfg.Prefix; len(prefix) > 0 {
-		if strings.HasPrefix(elem, prefix) {
-			// Cut prefix from the path.
-			elem = strings.TrimPrefix(elem, prefix)
-		} else {
-			// Prefix doesn't match.
-			s.notFound(w, r)
-			return
-		}
-	}
-	if len(elem) == 0 {
+
+	elem, ok := s.cutPrefix(elem)
+	if !ok || len(elem) == 0 {
 		s.notFound(w, r)
 		return
 	}
@@ -63,9 +70,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleListAllTypesRequest([0]string{}, w, r)
+						s.handleListAllTypesRequest([0]string{}, elemIsEscaped, w, r)
 					case "POST":
-						s.handleCreateAllTypesRequest([0]string{}, w, r)
+						s.handleCreateAllTypesRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET,POST")
 					}
@@ -91,15 +98,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "DELETE":
 							s.handleDeleteAllTypesRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "GET":
 							s.handleReadAllTypesRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "PATCH":
 							s.handleUpdateAllTypesRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "DELETE,GET,PATCH")
 						}
@@ -117,9 +124,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleListCategoryRequest([0]string{}, w, r)
+						s.handleListCategoryRequest([0]string{}, elemIsEscaped, w, r)
 					case "POST":
-						s.handleCreateCategoryRequest([0]string{}, w, r)
+						s.handleCreateCategoryRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET,POST")
 					}
@@ -148,15 +155,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "DELETE":
 							s.handleDeleteCategoryRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "GET":
 							s.handleReadCategoryRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "PATCH":
 							s.handleUpdateCategoryRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "DELETE,GET,PATCH")
 						}
@@ -177,7 +184,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							case "GET":
 								s.handleListCategoryPetsRequest([1]string{
 									args[0],
-								}, w, r)
+								}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "GET")
 							}
@@ -196,9 +203,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleListHatRequest([0]string{}, w, r)
+						s.handleListHatRequest([0]string{}, elemIsEscaped, w, r)
 					case "POST":
-						s.handleCreateHatRequest([0]string{}, w, r)
+						s.handleCreateHatRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET,POST")
 					}
@@ -227,15 +234,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "DELETE":
 							s.handleDeleteHatRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "GET":
 							s.handleReadHatRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "PATCH":
 							s.handleUpdateHatRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "DELETE,GET,PATCH")
 						}
@@ -256,7 +263,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							case "GET":
 								s.handleReadHatWearerRequest([1]string{
 									args[0],
-								}, w, r)
+								}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "GET")
 							}
@@ -275,9 +282,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleListPetRequest([0]string{}, w, r)
+						s.handleListPetRequest([0]string{}, elemIsEscaped, w, r)
 					case "POST":
-						s.handleCreatePetRequest([0]string{}, w, r)
+						s.handleCreatePetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET,POST")
 					}
@@ -306,15 +313,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "DELETE":
 							s.handleDeletePetRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "GET":
 							s.handleReadPetRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "PATCH":
 							s.handleUpdatePetRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "DELETE,GET,PATCH")
 						}
@@ -346,7 +353,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "GET":
 									s.handleListPetCategoriesRequest([1]string{
 										args[0],
-									}, w, r)
+									}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "GET")
 								}
@@ -366,7 +373,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "GET":
 									s.handleListPetFriendsRequest([1]string{
 										args[0],
-									}, w, r)
+									}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "GET")
 								}
@@ -386,7 +393,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "GET":
 									s.handleReadPetOwnerRequest([1]string{
 										args[0],
-									}, w, r)
+									}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "GET")
 								}
@@ -406,7 +413,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "GET":
 									s.handleListPetRescuerRequest([1]string{
 										args[0],
-									}, w, r)
+									}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "GET")
 								}
@@ -426,9 +433,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleListUserRequest([0]string{}, w, r)
+						s.handleListUserRequest([0]string{}, elemIsEscaped, w, r)
 					case "POST":
-						s.handleCreateUserRequest([0]string{}, w, r)
+						s.handleCreateUserRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET,POST")
 					}
@@ -457,15 +464,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "DELETE":
 							s.handleDeleteUserRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "GET":
 							s.handleReadUserRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						case "PATCH":
 							s.handleUpdateUserRequest([1]string{
 								args[0],
-							}, w, r)
+							}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "DELETE,GET,PATCH")
 						}
@@ -497,7 +504,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "GET":
 									s.handleListUserAnimalsSavedRequest([1]string{
 										args[0],
-									}, w, r)
+									}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "GET")
 								}
@@ -517,7 +524,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "GET":
 									s.handleReadUserBestFriendRequest([1]string{
 										args[0],
-									}, w, r)
+									}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "GET")
 								}
@@ -537,7 +544,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "GET":
 									s.handleReadUserFavoriteHatRequest([1]string{
 										args[0],
-									}, w, r)
+									}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "GET")
 								}
@@ -557,7 +564,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "GET":
 									s.handleListUserPetsRequest([1]string{
 										args[0],
-									}, w, r)
+									}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "GET")
 								}
@@ -576,6 +583,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // Route is route object.
 type Route struct {
 	name        string
+	summary     string
 	operationID string
 	pathPattern string
 	count       int
@@ -587,6 +595,11 @@ type Route struct {
 // It is guaranteed to be unique and not empty.
 func (r Route) Name() string {
 	return r.name
+}
+
+// Summary returns OpenAPI summary.
+func (r Route) Summary() string {
+	return r.summary
 }
 
 // OperationID returns OpenAPI operationId.
@@ -630,6 +643,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 		}()
 	}
 
+	elem, ok := s.cutPrefix(elem)
+	if !ok {
+		return r, false
+	}
+
 	// Static code generated router with unwrapped path search.
 	switch {
 	default:
@@ -659,6 +677,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					switch method {
 					case "GET":
 						r.name = "ListAllTypes"
+						r.summary = "List AllTypes"
 						r.operationID = "listAllTypes"
 						r.pathPattern = "/all-types"
 						r.args = args
@@ -666,6 +685,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return r, true
 					case "POST":
 						r.name = "CreateAllTypes"
+						r.summary = "Create a new AllTypes"
 						r.operationID = "createAllTypes"
 						r.pathPattern = "/all-types"
 						r.args = args
@@ -693,6 +713,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						case "DELETE":
 							// Leaf: DeleteAllTypes
 							r.name = "DeleteAllTypes"
+							r.summary = "Deletes a AllTypes by ID"
 							r.operationID = "deleteAllTypes"
 							r.pathPattern = "/all-types/{id}"
 							r.args = args
@@ -701,6 +722,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						case "GET":
 							// Leaf: ReadAllTypes
 							r.name = "ReadAllTypes"
+							r.summary = "Find a AllTypes by ID"
 							r.operationID = "readAllTypes"
 							r.pathPattern = "/all-types/{id}"
 							r.args = args
@@ -709,6 +731,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						case "PATCH":
 							// Leaf: UpdateAllTypes
 							r.name = "UpdateAllTypes"
+							r.summary = "Updates a AllTypes"
 							r.operationID = "updateAllTypes"
 							r.pathPattern = "/all-types/{id}"
 							r.args = args
@@ -730,6 +753,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					switch method {
 					case "GET":
 						r.name = "ListCategory"
+						r.summary = "List Categories"
 						r.operationID = "listCategory"
 						r.pathPattern = "/categories"
 						r.args = args
@@ -737,6 +761,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return r, true
 					case "POST":
 						r.name = "CreateCategory"
+						r.summary = "Create a new Category"
 						r.operationID = "createCategory"
 						r.pathPattern = "/categories"
 						r.args = args
@@ -767,6 +792,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						switch method {
 						case "DELETE":
 							r.name = "DeleteCategory"
+							r.summary = "Deletes a Category by ID"
 							r.operationID = "deleteCategory"
 							r.pathPattern = "/categories/{id}"
 							r.args = args
@@ -774,6 +800,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return r, true
 						case "GET":
 							r.name = "ReadCategory"
+							r.summary = "Find a Category by ID"
 							r.operationID = "readCategory"
 							r.pathPattern = "/categories/{id}"
 							r.args = args
@@ -781,6 +808,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return r, true
 						case "PATCH":
 							r.name = "UpdateCategory"
+							r.summary = "Updates a Category"
 							r.operationID = "updateCategory"
 							r.pathPattern = "/categories/{id}"
 							r.args = args
@@ -803,6 +831,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							case "GET":
 								// Leaf: ListCategoryPets
 								r.name = "ListCategoryPets"
+								r.summary = "List attached Pets"
 								r.operationID = "listCategoryPets"
 								r.pathPattern = "/categories/{id}/pets"
 								r.args = args
@@ -825,6 +854,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					switch method {
 					case "GET":
 						r.name = "ListHat"
+						r.summary = "List Hats"
 						r.operationID = "listHat"
 						r.pathPattern = "/hats"
 						r.args = args
@@ -832,6 +862,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return r, true
 					case "POST":
 						r.name = "CreateHat"
+						r.summary = "Create a new Hat"
 						r.operationID = "createHat"
 						r.pathPattern = "/hats"
 						r.args = args
@@ -862,6 +893,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						switch method {
 						case "DELETE":
 							r.name = "DeleteHat"
+							r.summary = "Deletes a Hat by ID"
 							r.operationID = "deleteHat"
 							r.pathPattern = "/hats/{id}"
 							r.args = args
@@ -869,6 +901,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return r, true
 						case "GET":
 							r.name = "ReadHat"
+							r.summary = "Find a Hat by ID"
 							r.operationID = "readHat"
 							r.pathPattern = "/hats/{id}"
 							r.args = args
@@ -876,6 +909,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return r, true
 						case "PATCH":
 							r.name = "UpdateHat"
+							r.summary = "Updates a Hat"
 							r.operationID = "updateHat"
 							r.pathPattern = "/hats/{id}"
 							r.args = args
@@ -898,6 +932,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							case "GET":
 								// Leaf: ReadHatWearer
 								r.name = "ReadHatWearer"
+								r.summary = "Find the attached User"
 								r.operationID = "readHatWearer"
 								r.pathPattern = "/hats/{id}/wearer"
 								r.args = args
@@ -920,6 +955,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					switch method {
 					case "GET":
 						r.name = "ListPet"
+						r.summary = "List Pets"
 						r.operationID = "listPet"
 						r.pathPattern = "/pets"
 						r.args = args
@@ -927,6 +963,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return r, true
 					case "POST":
 						r.name = "CreatePet"
+						r.summary = "Create a new Pet"
 						r.operationID = "createPet"
 						r.pathPattern = "/pets"
 						r.args = args
@@ -957,6 +994,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						switch method {
 						case "DELETE":
 							r.name = "DeletePet"
+							r.summary = "Deletes a Pet by ID"
 							r.operationID = "deletePet"
 							r.pathPattern = "/pets/{id}"
 							r.args = args
@@ -964,6 +1002,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return r, true
 						case "GET":
 							r.name = "ReadPet"
+							r.summary = "Find a Pet by ID"
 							r.operationID = "readPet"
 							r.pathPattern = "/pets/{id}"
 							r.args = args
@@ -971,6 +1010,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return r, true
 						case "PATCH":
 							r.name = "UpdatePet"
+							r.summary = "Updates a Pet"
 							r.operationID = "updatePet"
 							r.pathPattern = "/pets/{id}"
 							r.args = args
@@ -1004,6 +1044,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								case "GET":
 									// Leaf: ListPetCategories
 									r.name = "ListPetCategories"
+									r.summary = "List attached Categories"
 									r.operationID = "listPetCategories"
 									r.pathPattern = "/pets/{id}/categories"
 									r.args = args
@@ -1025,6 +1066,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								case "GET":
 									// Leaf: ListPetFriends
 									r.name = "ListPetFriends"
+									r.summary = "List attached Friends"
 									r.operationID = "listPetFriends"
 									r.pathPattern = "/pets/{id}/friends"
 									r.args = args
@@ -1046,6 +1088,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								case "GET":
 									// Leaf: ReadPetOwner
 									r.name = "ReadPetOwner"
+									r.summary = "Find the attached User"
 									r.operationID = "readPetOwner"
 									r.pathPattern = "/pets/{id}/owner"
 									r.args = args
@@ -1067,6 +1110,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								case "GET":
 									// Leaf: ListPetRescuer
 									r.name = "ListPetRescuer"
+									r.summary = "List attached Rescuers"
 									r.operationID = "listPetRescuer"
 									r.pathPattern = "/pets/{id}/rescuer"
 									r.args = args
@@ -1090,6 +1134,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					switch method {
 					case "GET":
 						r.name = "ListUser"
+						r.summary = "List Users"
 						r.operationID = "listUser"
 						r.pathPattern = "/users"
 						r.args = args
@@ -1097,6 +1142,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return r, true
 					case "POST":
 						r.name = "CreateUser"
+						r.summary = "Create a new User"
 						r.operationID = "createUser"
 						r.pathPattern = "/users"
 						r.args = args
@@ -1127,6 +1173,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						switch method {
 						case "DELETE":
 							r.name = "DeleteUser"
+							r.summary = "Deletes a User by ID"
 							r.operationID = "deleteUser"
 							r.pathPattern = "/users/{id}"
 							r.args = args
@@ -1134,6 +1181,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return r, true
 						case "GET":
 							r.name = "ReadUser"
+							r.summary = "Find a User by ID"
 							r.operationID = "readUser"
 							r.pathPattern = "/users/{id}"
 							r.args = args
@@ -1141,6 +1189,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return r, true
 						case "PATCH":
 							r.name = "UpdateUser"
+							r.summary = "Updates a User"
 							r.operationID = "updateUser"
 							r.pathPattern = "/users/{id}"
 							r.args = args
@@ -1174,6 +1223,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								case "GET":
 									// Leaf: ListUserAnimalsSaved
 									r.name = "ListUserAnimalsSaved"
+									r.summary = "List attached AnimalsSaveds"
 									r.operationID = "listUserAnimalsSaved"
 									r.pathPattern = "/users/{id}/animals-saved"
 									r.args = args
@@ -1195,6 +1245,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								case "GET":
 									// Leaf: ReadUserBestFriend
 									r.name = "ReadUserBestFriend"
+									r.summary = "Find the attached User"
 									r.operationID = "readUserBestFriend"
 									r.pathPattern = "/users/{id}/best-friend"
 									r.args = args
@@ -1216,6 +1267,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								case "GET":
 									// Leaf: ReadUserFavoriteHat
 									r.name = "ReadUserFavoriteHat"
+									r.summary = "Find the attached Hat"
 									r.operationID = "readUserFavoriteHat"
 									r.pathPattern = "/users/{id}/favorite-hat"
 									r.args = args
@@ -1237,6 +1289,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								case "GET":
 									// Leaf: ListUserPets
 									r.name = "ListUserPets"
+									r.summary = "List attached Pets"
 									r.operationID = "listUserPets"
 									r.pathPattern = "/users/{id}/pets"
 									r.args = args
