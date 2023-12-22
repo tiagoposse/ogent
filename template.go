@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"path"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"text/template"
 
@@ -41,6 +42,7 @@ var (
 		"setFieldExpr":    setFieldExpr,
 		"viewName":        entoas.ViewName,
 		"viewNameEdge":    entoas.ViewNameEdge,
+		"isSlice":         isSlice,
 	}
 	// templates holds all templates used by ogent.
 	templates = gen.MustParse(gen.NewTemplate("ogent").Funcs(funcMap).ParseFS(templateDir, "template/*tmpl"))
@@ -237,7 +239,7 @@ func setFieldExpr(f *gen.Field, schema, rec, ident string) (string, error) {
 		case Date:
 			opt = "Date"
 		case Time:
-			opt = "Time"			
+			opt = "Time"
 		case Duration:
 			opt = "Duration"
 		case UUID:
@@ -310,4 +312,12 @@ func entToOgen(f *gen.Field, expr string) string {
 	default:
 		return expr
 	}
+}
+
+func isSlice(f *gen.Field) bool {
+	if f.Type.Type != field.TypeJSON {
+		return false
+	}
+
+	return f.Type.RType.Kind == reflect.Slice || f.Type.RType.Kind == reflect.Array
 }

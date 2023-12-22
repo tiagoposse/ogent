@@ -10,6 +10,10 @@
 				if req.{{ $f.StructField }} != nil {
 					b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
 				}
+			{{- else if isSlice $f }}
+				if req.{{ $f.StructField }} != nil {
+					b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+				}
 			{{- else }}
 				if v, ok := req.{{ $f.StructField}}.Get(); ok {
 					{{- $x := "v" }}
